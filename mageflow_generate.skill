@@ -1,0 +1,62 @@
+{
+ "schema": 2,
+ "name": "mageflow_generate",
+ "description": "Generate or edit images via Mage-Flow (Microsoft 4B text-to-image + instruction-edit model) through the live HuggingFace Space mage-flow-community/mage-flow, executed on a remote Linux host over SSH. Free ZeroGPU quota; needs a HuggingFace read token and an SSH-reachable host with gradio_client installed. v2 fixes six bugs in v1: SSH key/config discovery, the dead microsoft/mage-flow Space, the /False vs /generate endpoint name, the gradio_client >=2 hf_token->token rename, the wrong publish directory, and hardcoded credentials.",
+ "parameters": {
+  "edit": {
+   "description": "If true, treat image_path as an input image and apply prompt as an EDIT instruction",
+   "type": "boolean"
+  },
+  "height": {
+   "description": "Height, default 1024",
+   "type": "number"
+  },
+  "image_path": {
+   "description": "Path to an input image ON THE REMOTE HOST. Required when edit=true",
+   "type": "string"
+  },
+  "negative_prompt": {
+   "description": "Things to avoid, e.g. 'blurry, watermark'",
+   "type": "string"
+  },
+  "prompt": {
+   "description": "Text prompt for generation, or the edit instruction when edit=true",
+   "type": "string"
+  },
+  "seed": {
+   "description": "Seed, default 42",
+   "type": "number"
+  },
+  "steps": {
+   "description": "Sampling steps, 4=turbo default, 8+ quality",
+   "type": "number"
+  },
+  "variant": {
+   "description": "turbo or quality",
+   "type": "string"
+  },
+  "vps_host": {
+   "type": "string",
+   "description": "SSH host running gradio_client (default: 129.80.112.9)"
+  },
+  "vps_user": {
+   "type": "string",
+   "description": "SSH user (default: ubuntu)"
+  },
+  "width": {
+   "description": "Width, default 1024",
+   "type": "number"
+  }
+ },
+ "code": "import json, os, subprocess, base64, urllib.request, re\n\ntry:\n    prompt\nexcept NameError:\n    prompt = \"\"\ntry:\n    edit\nexcept NameError:\n    edit = False\ntry:\n    image_path\nexcept NameError:\n    image_path = \"\"\ntry:\n    steps\nexcept NameError:\n    steps = 4\ntry:\n    variant\nexcept NameError:\n    variant = \"turbo\"\ntry:\n    width\nexcept NameError:\n    width = 1024\ntry:\n    height\nexcept NameError:\n    height = 1024\ntry:\n    seed\nexcept NameError:\n    seed = 42\ntry:\n    negative_prompt\nexcept NameError:\n    negative_prompt = \"\"\ntry:\n    vps_host\nexcept NameError:\n    vps_host = \"\"\ntry:\n    vps_user\nexcept NameError:\n    vps_user = \"\"\n\nDEFAULT_VPS_HOST = \"129.80.112.9\"\nDEFAULT_VPS_USER = \"ubuntu\"\nREMOTE_DASH = \"/home/ubuntu/adwa-engine/dashboard\"\nDEFAULT_SSH_KEY = \"/data/data/com.adwa.adwa_apk/app_flutter/linux/rootfs/data/data/com.termux/files/home/.ssh/tobia_key\"\nSPACE = \"mage-flow-community/mage-flow\"\nPUBLIC_SCHEME = \"http\"\nPREFS = \"/data/user/0/com.adwa.adwa_apk/shared_prefs/FlutterSharedPreferences.xml\"\n\n\ndef _cfg(v, default):\n    v = str(v or \"\").strip()\n    return v if v else default\n\n\ndef _token():\n    \"\"\"Token resolution: secure store -> app prefs. No hardcoded secrets.\"\"\"\n    for key in (\"HUGGINGFACE_TOKEN\", \"HF_TOKEN\"):\n        try:\n            v = get_api_key(key)\n            if v and len(str(v)) > 10:\n                return str(v).strip()\n        except Exception:\n            pass\n    try:\n        t = open(PREFS, errors=\"ignore\").read()\n        for key in (\"HUGGINGFACE_TOKEN\", \"HF_TOKEN\"):\n            m = re.search(r'name=\"flutter\\.' + key + r'\">([^<]*)<', t)\n            if m and len(m.group(1)) > 10:\n                return m.group(1).strip()\n    except Exception:\n        pass\n    return \"\"\n\n\ndef _ssh_family_paths():\n    \"\"\"Resolve the ssh dir across app installs / rootfs rebuilds.\"\"\"\n    cands = [\n        \"/data/data/com.adwa.adwa_apk/app_flutter/linux/rootfs/data/data/com.termux/files/home\",\n        \"/data/user/0/com.adwa.adwa_apk/app_flutter/linux/rootfs/data/data/com.termux/files/home\",\n    ]\n    for c in cands:\n        if os.path.isdir(c):\n            return c\n    return cands[0]\n\n\ndef _run():\n    p = str(prompt or \"\").strip()\n    if not p:\n        return \"\\u274c No prompt given. Even a 4B model can't read your mind.\"\n\n    ed = bool(edit)\n    ip = str(image_path or \"\").strip()\n    if ed and not ip:\n        return \"\\u274c edit=true needs image_path pointing at a file ON THE VPS (e.g. /home/ubuntu/photo.png).\"\n\n    st = float(steps or 4)\n    va = str(variant or \"turbo\").strip().lower()\n    if va not in (\"turbo\", \"quality\"):\n        va = \"turbo\"\n    w = int(width or 1024)\n    h = int(height or 1024)\n    sd = int(seed if seed is not None else 42)\n    ng = str(negative_prompt or \"\")\n    host = _cfg(vps_host, DEFAULT_VPS_HOST)\n    user = _cfg(vps_user, DEFAULT_VPS_USER)\n\n    tok = _token()\n    if not tok:\n        return (\"\\u274c No HuggingFace token found.\\n\"\n                \"\\U0001f527 Save one first: 'my HF token is hf_...' (read token, free account is enough)\")\n\n    home = _ssh_family_paths()\n    sshdir = home + \"/.ssh\"\n    key = DEFAULT_SSH_KEY if os.path.exists(DEFAULT_SSH_KEY) else sshdir + \"/tobia_key\"\n    cfg = sshdir + \"/config\"\n    kh = sshdir + \"/known_hosts\"\n\n    try:\n        os.makedirs(sshdir, exist_ok=True)\n        if not os.path.exists(key):\n            subprocess.run([\"/system/bin/sh\", \"-c\", \"cp /sdcard/tobia_ssh_key %s && chmod 600 %s\" % (key, key)],\n                           capture_output=True, text=True, timeout=60)\n        if not os.path.exists(cfg):\n            with open(cfg, \"w\") as f:\n                f.write(\"Host *\\n    IdentityFile %s\\n    StrictHostKeyChecking no\\n\"\n                        \"    UserKnownHostsFile %s\\n    User %s\\n\" % (key, kh, user))\n            os.chmod(cfg, 0o600)\n    except Exception as e:\n        return \"\\u274c Could not prepare ssh config at %s: %s\" % (sshdir, e)\n\n    runner = (\n        \"import os, shutil, datetime, json\\n\"\n        \"try:\\n\"\n        \"    from gradio_client import Client\\n\"\n        \"    c = Client(%r, token=os.environ['HF_TOKEN'], verbose=False)\\n\"\n        \"    kw = dict(prompt=%r, negative_prompt=%r, steps=%r, cfg=1.0,\\n\"\n        \"              height=%r, width=%r, max_size=%r, seed=%r,\\n\"\n        \"              model_variant=%r, api_name='/generate')\\n\"\n        \"    img = %r\\n\"\n        \"    kw['image'] = img if img else None\\n\"\n        \"    out = c.predict(**kw)\\n\"\n        \"    name = 'mageflow_' + datetime.datetime.now().strftime('%%Y%%m%%d_%%H%%M%%S') + '.png'\\n\"\n        \"    dst = %r + '/' + name\\n\"\n        \"    shutil.copy(out, dst)\\n\"\n        \"    os.chmod(dst, 0o644)\\n\"\n        \"    print('RESULT_JSON' + json.dumps({'ok': True, 'name': name, 'path': dst}))\\n\"\n        \"except Exception as e:\\n\"\n        \"    print('RESULT_JSON' + json.dumps({'ok': False, 'error': str(e)[:600]}))\\n\"\n    ) % (SPACE, p, ng, st, h, w, max(w, h), sd, va, ip, REMOTE_DASH)\n\n    b64 = base64.b64encode(runner.encode()).decode()\n    remote = (\"echo %s | base64 -d > /tmp/mf_run.py && \"\n              \"HF_TOKEN='%s' HUGGINGFACE_TOKEN='%s' timeout 420 python3 -u /tmp/mf_run.py\") % (b64, tok, tok)\n\n    cmd = [\"ssh\", \"-F\", cfg, \"-o\", \"BatchMode=yes\", \"-o\", \"ConnectTimeout=20\",\n           \"%s@%s\" % (user, host), remote]\n    try:\n        pr = subprocess.run(cmd, capture_output=True, text=True, timeout=480)\n    except subprocess.TimeoutExpired:\n        return \"\\u274c VPS call timed out after 8 min \\u2014 ZeroGPU queue. Retry with steps=4.\"\n    except FileNotFoundError:\n        return \"\\u274c No ssh binary available in this runtime.\"\n\n    combined = (pr.stdout or \"\") + \"\\n\" + (pr.stderr or \"\")\n    payload = None\n    for line in combined.splitlines():\n        if line.startswith(\"RESULT_JSON\"):\n            try:\n                payload = json.loads(line[len(\"RESULT_JSON\"):])\n            except Exception:\n                pass\n\n    if payload is None:\n        return \"\\u274c Could not reach %s or parse its reply.\\n%s\" % (\n            host, \"\\n\".join(combined.strip().splitlines()[-6:]))\n\n    if not payload.get(\"ok\"):\n        err = payload.get(\"error\", \"unknown\")\n        hint = \"\"\n        if \"publickey\" in err:\n            hint = \"\\n\\U0001f527 SSH key rejected \\u2014 authorize your public key on %s (or set vps_host).\" % host\n        elif \"invalid state\" in err or \"RUNTIME_ERROR\" in err:\n            hint = \"\\n\\U0001f527 That Space is down. Query the HF API for another RUNNING mage-flow host.\"\n        elif \"Cannot find a function\" in err:\n            hint = \"\\n\\U0001f527 Endpoint drifted \\u2014 re-read c.config['dependencies'] for the real api_name.\"\n        elif \"quota\" in err.lower():\n            hint = \"\\n\\U0001f527 ZeroGPU quota exhausted \\u2014 free tier resets daily. Use generate_image instead.\"\n        elif \"Bearer\" in err or \"token\" in err.lower():\n            hint = \"\\n\\U0001f527 HF token rejected \\u2014 check it is valid and has read access.\"\n        return \"\\u274c Mage-Flow failed: \" + err + hint\n\n    name = payload[\"name\"]\n    vps_path = payload[\"path\"]\n    url = \"%s://%s/dashboard/%s\" % (PUBLIC_SCHEME, host, name)\n\n    local_dir = \"/data/user/0/com.adwa.adwa_apk/app_flutter/workspace/images\"\n    try:\n        os.makedirs(local_dir, exist_ok=True)\n    except Exception:\n        local_dir = os.path.expanduser(\"~/workspace/images\")\n        os.makedirs(local_dir, exist_ok=True)\n    local_path = os.path.join(local_dir, name)\n    fetched = False\n    try:\n        urllib.request.urlretrieve(url, local_path)\n        fetched = os.path.getsize(local_path) > 1000\n    except Exception:\n        try:\n            subprocess.run([\"/system/bin/sh\", \"-c\", \"curl -s -m 45 -o '%s' '%s'\" % (local_path, url)],\n                           capture_output=True, text=True, timeout=60)\n            fetched = os.path.exists(local_path) and os.path.getsize(local_path) > 1000\n        except Exception:\n            fetched = False\n\n    mode = \"edit\" if ed else \"generate\"\n    lines = [\"\\u2705 Mage-Flow %s done (%s, %d steps, %dx%d)\" % (mode, va, int(st), w, h),\n             \"URL: \" + url,\n             \"VPS: \" + vps_path]\n    if fetched:\n        lines.append(\"LOCAL: \" + local_path)\n        lines.append(\"EMBED: ![mageflow](http://localhost:18790/files/workspace/images/%s)\" % name)\n    else:\n        lines.append(\"LOCAL: fetch failed \\u2014 live at the URL above\")\n    return \"\\n\".join(lines)\n\n\nresult = _run()\n",
+ "author": "tobia",
+ "version": "2.0.0",
+ "requires_keys": [
+  "HUGGINGFACE_TOKEN"
+ ],
+ "exported_at": 1795036224,
+ "homepage": "https://huggingface.co/spaces/mage-flow-community/mage-flow",
+ "notes": "Requires: (1) a HuggingFace READ token saved as HUGGINGFACE_TOKEN, (2) an SSH-reachable Linux host with gradio_client>=2 installed and a public key authorized. Default host is the author's own VPS \u2014 set vps_host to your own.",
+ "changelog": "2.0.0: fixed bare-ssh invocation (no -i/-F), unwritable known_hosts path, dead microsoft/mage-flow Space -> mage-flow-community/mage-flow, api_name /False -> /generate, gradio_client hf_token -> token, publish dir -> adwa-engine dashboard mount; removed hardcoded token fallback; added vps_host/vps_user parameters.",
+ "sha256": "4db2484c96c4be24114612ac413f32ed2b804b76a9eb742c507202969eea52ba"
+}
