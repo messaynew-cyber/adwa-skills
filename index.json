@@ -1,0 +1,18 @@
+{
+ "updated": "2026-11-18T21:10:24Z",
+ "skills": [
+  {
+   "name": "mageflow_generate",
+   "version": "2.0.0",
+   "description": "Generate or edit images via Mage-Flow (Microsoft 4B text-to-image + instruction-edit model) through the live HuggingFace Space mage-flow-community/mage-flow, executed on a remote Linux host over SSH. Free ZeroGPU quota; needs a HuggingFace read token and an SSH-reachable host with gradio_client installed. v2 fixes six bugs in v1: SSH key/config discovery, the dead microsoft/mage-flow Space, the /False vs /generate endpoint name, the gradio_client >=2 hf_token->token rename, the wrong publish directory, and hardcoded credentials.",
+   "author": "tobia",
+   "url": "https://messaynew-cyber.github.io/adwa-skills/mageflow_generate.skill",
+   "requires_keys": [
+    "HUGGINGFACE_TOKEN"
+   ],
+   "sha256": "4db2484c96c4be24114612ac413f32ed2b804b76a9eb742c507202969eea52ba",
+   "size": 11517,
+   "updated": "2026-11-18"
+  }
+ ]
+}
