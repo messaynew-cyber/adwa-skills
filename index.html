@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tobia Skill Store</title>
+<style>
+  :root{--bg:#08080c;--panel:#101018;--border:rgba(255,255,255,.07);--text:#eaeaf2;--muted:#8b8b9e;--teal:#2dd4bf;--amber:#fbbf24;--mon:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',-apple-system,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+  .wrap{max-width:720px;margin:0 auto;padding:48px 24px}
+  header h1{font-size:28px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;gap:10px}
+  header h1 .dot{color:var(--teal)}
+  header p{color:var(--muted);margin-top:6px;font-size:14px;line-height:1.6}
+  .count{display:inline-block;margin-top:18px;padding:5px 12px;border:1px solid var(--border);border-radius:99px;font-family:var(--mon);font-size:12px;color:var(--muted);background:var(--panel)}
+  .card{margin-top:22px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px;transition:border-color .2s}
+  .card:hover{border-color:rgba(45,212,191,.35)}
+  .card .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .card h2{font-size:17px;font-weight:650;font-family:var(--mon);color:var(--teal)}
+  .ver{font-family:var(--mon);font-size:11px;color:var(--muted);border:1px solid var(--border);padding:3px 8px;border-radius:6px}
+  .card .desc{color:#c9c9d8;font-size:13.5px;line-height:1.65;margin-top:10px}
+  .meta{margin-top:14px;display:flex;gap:14px;font-family:var(--mon);font-size:11px;color:var(--muted);flex-wrap:wrap}
+  .howto{margin-top:26px;background:rgba(45,212,191,.05);border:1px dashed rgba(45,212,191,.3);border-radius:14px;padding:18px}
+  .howto h3{font-size:13px;color:var(--teal);font-family:var(--mon);font-weight:600}
+  .howto code{display:block;margin-top:10px;font-family:var(--mon);font-size:12.5px;color:var(--amber);background:rgba(0,0,0,.35);padding:10px 12px;border-radius:8px;line-height:1.7;overflow-x:auto}
+  footer{margin-top:40px;color:#55556a;font-size:12px;text-align:center;font-family:var(--mon)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="dot">🛍️</span> Tobia Skill Store</h1>
+    <p>Portable tools for the Tobia agent. Browse, install, extend — no rebuild needed. Skills are exported from Tobia herself (<code>skill_store</code>), shared here, and installed in one command.</p>
+    <span class="count" id="count">0 skills</span>
+  </header>
+  <div id="list"></div>
+  <div class="howto">
+    <h3>INSTALL INSIDE TOBIA</h3>
+    <code>skill_store action=available<br>skill_store action=install name="&lt;skill&gt;"</code>
+  </div>
+  <footer>messaynew-cyber.github.io/adwa-skills · Tobia Skill Registry · Nov 2026</footer>
+</div>
+<script>
+fetch('index.json').then(r=>r.json()).then(d=>{
+  const s=d.skills||[];
+  document.getElementById('count').textContent=s.length+' skill'+(s.length===1?'':'s');
+  const list=document.getElementById('list');
+  s.forEach(x=>{
+    const el=document.createElement('div');
+    el.className='card';
+    el.innerHTML='<div class="top"><h2>'+x.name+'</h2><span class="ver">v'+x.version+'</span></div>'+
+      '<div class="desc">'+(x.description||'')+'</div>'+
+      '<div class="meta"><span>👤 '+(x.author||'tobia')+'</span><span>📦 .skill manifest</span></div>';
+    list.appendChild(el);
+  });
+}).catch(e=>{document.getElementById('list').innerHTML='<p style="color:#f87171;margin-top:20px">Store index unreachable.</p>'});
+</script>
+</body>
+</html>
