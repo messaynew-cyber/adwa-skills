@@ -1,0 +1,13 @@
+{
+ "schema": 2,
+ "name": "probe_test",
+ "description": "validation probe — should be rejected",
+ "parameters": {},
+ "code": "print(1)",
+ "author": "community",
+ "version": "1.0.0",
+ "requires_keys": [],
+ "changelog": "",
+ "homepage": "",
+ "exported_at": 1795195817
+}
