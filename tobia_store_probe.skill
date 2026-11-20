@@ -1,0 +1,13 @@
+{
+ "schema": 2,
+ "name": "tobia_store_probe",
+ "description": "Connectivity probe - no real tool. Safe to delete.",
+ "parameters": {},
+ "code": "result = 'probe'\n",
+ "author": "tobia-probe",
+ "version": "9.9.9",
+ "requires_keys": [],
+ "changelog": "",
+ "homepage": "",
+ "exported_at": 1795201000
+}
