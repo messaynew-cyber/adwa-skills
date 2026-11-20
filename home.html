@@ -3,10 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tobia — Skill Registry</title>
-<meta name="description" content="Portable skills for Tobia. Publish from the app, install with one line, no rebuild.">
+<title>Tobia — Skill Store</title>
+<meta name="description" content="A shared registry of Tobia skills. Publish from any install, install in one line.">
 <meta name="theme-color" content="#02040B">
 <meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Tobia — Skill Store">
+<meta property="og:description" content="A shared registry of Tobia skills. Publish from any install, install in one line.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://messaynew-cyber.github.io/adwa-skills/home.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%2341E0D8'>ጦ</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +24,7 @@
   --text:#E9EDF5; --muted:#8A93A8;
   --grad:linear-gradient(120deg,var(--cyan),var(--gold));
   --chip:rgba(255,255,255,.02);
-  --nav-bg:rgba(2,4,11,.72); --nav-bg-2:rgba(2,4,11,.9);
+  --nav-bg:rgba(2,4,11,.72); --nav-bg-2:rgba(2,4,11,.92);
   --shadow:0 30px 80px -40px rgba(0,0,0,.9);
   --font-body:'DM Sans',system-ui,sans-serif;
   --font-display:'Cinzel',serif;
@@ -34,34 +39,28 @@ html[data-theme="light"]{
   --cyan:#0D9488; --gold:#B45309;
   --text:#12141C; --muted:#5A6375;
   --chip:rgba(15,20,35,.02);
-  --nav-bg:rgba(244,245,247,.8); --nav-bg-2:rgba(244,245,247,.94);
+  --nav-bg:rgba(244,245,247,.8); --nav-bg-2:rgba(244,245,247,.95);
   --shadow:0 30px 70px -45px rgba(15,20,35,.35);
 }
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:var(--font-body);font-size:16px;line-height:1.65;
-  -webkit-font-smoothing:antialiased;
-  transition:background .35s var(--ease-out),color .35s var(--ease-out);
-}
-body::after{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.02;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  transition:background .35s var(--ease-out),color .35s var(--ease-out)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.02;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
 .wrap{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 24px}
 a{color:inherit}
 
-/* nav */
-.nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(18px) saturate(140%);
+.nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(18px) saturate(140%);
   background:var(--nav-bg);border-bottom:1px solid transparent;transition:.3s var(--ease-out)}
 .nav.scrolled{background:var(--nav-bg-2);border-bottom-color:var(--line)}
-.nav-inner{max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:28px}
+.nav-inner{max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:26px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .brand-mark{font-family:var(--font-eth);font-size:19px;color:var(--cyan);line-height:1;
   text-shadow:0 0 22px rgba(65,224,216,.35)}
 .brand-name{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.12em;text-transform:uppercase}
 .brand-name em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.nav-links{display:flex;align-items:center;gap:26px;margin-left:auto}
+.nav-links{display:flex;align-items:center;gap:24px;margin-left:auto}
 .nav-links a{font-size:13.5px;color:var(--muted);text-decoration:none;transition:color .2s var(--ease-out)}
 .nav-links a:hover{color:var(--text)}
 .btn{display:inline-flex;align-items:center;gap:9px;padding:11px 19px;border-radius:999px;
@@ -72,88 +71,81 @@ a{color:inherit}
 .btn.primary{background:var(--grad);border:0;color:#04121A;font-weight:600}
 .btn.primary:hover{filter:brightness(1.06)}
 .btn:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
-.nav-cta{padding:9px 16px;font-size:13px}
 .theme-toggle{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);
-  background:var(--chip);color:var(--muted);display:grid;place-items:center;cursor:pointer;
-  transition:.2s var(--ease-out)}
-.theme-toggle:hover{color:var(--cyan);border-color:var(--line-2)}
+  background:var(--chip);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:.2s}
+.theme-toggle:hover{color:var(--cyan)}
 .theme-toggle svg{width:16px;height:16px}
 html[data-theme="dark"] .icon-sun{display:none}
 html[data-theme="light"] .icon-moon{display:none}
 
-/* hero */
-.hero{position:relative;padding:96px 0 74px;overflow:hidden}
+.hero{position:relative;padding:84px 0 54px;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:-30% 45% 40% -25%;pointer-events:none;
-  background:radial-gradient(50% 50% at 40% 40%,rgba(65,224,216,.14),transparent 70%);
-  filter:blur(30px)}
-.hero::after{content:"";position:absolute;inset:20% -30% 10% 55%;pointer-events:none;
-  background:radial-gradient(45% 45% at 60% 50%,rgba(242,193,78,.10),transparent 70%);
-  filter:blur(30px)}
-.glyph{position:absolute;right:-2%;top:6%;font-family:var(--font-eth);font-size:min(46vw,540px);
-  line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(65,224,216,.10);pointer-events:none;
-  user-select:none}
+  background:radial-gradient(50% 50% at 40% 40%,rgba(65,224,216,.14),transparent 70%);filter:blur(30px)}
+.glyph{position:absolute;right:-2%;top:4%;font-family:var(--font-eth);font-size:min(44vw,500px);
+  line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(65,224,216,.10);pointer-events:none;user-select:none}
 .chip{display:inline-flex;align-items:center;gap:9px;padding:7px 14px;border-radius:999px;
-  border:1px solid var(--line);background:var(--chip);
-  font-size:12px;color:var(--muted);letter-spacing:.02em;margin-bottom:26px}
+  border:1px solid var(--line);background:var(--chip);font-size:12px;color:var(--muted);margin-bottom:22px}
 .tri{display:inline-flex;gap:2px}
 .tri i{width:4px;height:12px;border-radius:1px}
 .tri i:nth-child(1){background:#0B8A34}.tri i:nth-child(2){background:#F2C14E}.tri i:nth-child(3){background:#D22B2B}
-h1{font-family:var(--font-body);font-weight:600;font-size:clamp(40px,6vw,76px);
-  line-height:1.02;letter-spacing:-.035em;margin:0 0 24px;max-width:20ch;text-wrap:balance}
+h1{font-weight:600;font-size:clamp(38px,5.4vw,66px);line-height:1.03;letter-spacing:-.035em;
+  margin:0 0 20px;max-width:18ch;text-wrap:balance}
 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.lede{color:var(--muted);font-size:17.5px;max-width:60ch;margin:0 0 34px}
+.lede{color:var(--muted);font-size:17px;max-width:62ch;margin:0 0 28px}
 .lede strong{color:var(--text);font-weight:500}
-.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
 .spec{font-family:var(--font-mono);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
 .spec .t{font-family:var(--font-eth);color:var(--cyan)}
 
-/* registry */
-.registry{padding:0 0 10px}
-.head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  padding:28px 0 20px;border-top:1px solid var(--line)}
-.h2{font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--muted);margin:0}
-.h2 span{font-family:var(--font-mono);letter-spacing:0;text-transform:none;color:var(--cyan);margin-left:12px}
-.search{display:flex;align-items:center;gap:10px;min-width:280px;padding:11px 16px;border-radius:14px;
-  border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow);
-  transition:border-color .22s var(--ease-out)}
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:22px 0 18px;
+  border-top:1px solid var(--line)}
+.search{display:flex;align-items:center;gap:10px;flex:1 1 260px;padding:11px 16px;border-radius:14px;
+  border:1px solid var(--line);background:var(--panel);transition:border-color .22s var(--ease-out)}
 .search:focus-within{border-color:var(--cyan)}
 .search input{border:0;outline:0;background:none;color:var(--text);font:inherit;font-size:14px;width:100%}
 .search input::placeholder{color:var(--muted)}
 .search kbd{font-family:var(--font-mono);font-size:10.5px;color:var(--muted);
   border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+.seg{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.seg button{border:0;background:none;color:var(--muted);font:inherit;font-size:12.5px;
+  padding:7px 12px;border-radius:9px;cursor:pointer;transition:.18s var(--ease-out);white-space:nowrap}
+.seg button.active{background:var(--chip);color:var(--text)}
+.seg button:hover{color:var(--text)}
+.seg button:active{transform:scale(.97)}
+.count{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);margin-left:2px}
 
-.list{display:grid;gap:14px;padding-bottom:12px}
+.list{display:grid;gap:12px;padding:6px 0 14px}
 .card{border:1px solid var(--line);border-radius:18px;background:var(--panel);overflow:hidden;
-  box-shadow:var(--shadow);
-  opacity:0;transform:translateY(10px);animation:rise .5s var(--ease-out) forwards;
-  animation-delay:calc(var(--i)*60ms);
-  transition:border-color .25s var(--ease-out),transform .25s var(--ease-out)}
+  box-shadow:var(--shadow);opacity:0;transform:translateY(8px);
+  animation:rise .45s var(--ease-out) forwards;animation-delay:calc(var(--i)*45ms);
+  transition:border-color .25s var(--ease-out)}
 .card:hover{border-color:var(--line-2)}
+.card.open{border-color:rgba(65,224,216,.35)}
 @keyframes rise{to{opacity:1;transform:none}}
-.row{display:grid;grid-template-columns:1fr auto auto;gap:18px;align-items:center;
-  width:100%;padding:22px 24px;background:none;border:0;color:inherit;font:inherit;text-align:left;
-  cursor:pointer}
+.row{display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:center;width:100%;
+  padding:20px 22px;background:none;border:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
 .row:focus-visible{outline:2px solid var(--cyan);outline-offset:-3px}
-.name{font-family:var(--font-body);font-weight:600;font-size:18px;letter-spacing:-.01em;
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.tag{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;color:var(--gold);
-  border:1px solid rgba(242,193,78,.35);background:rgba(242,193,78,.07);border-radius:999px;padding:2px 8px}
-html[data-theme="light"] .tag{border-color:rgba(180,83,9,.3);background:rgba(180,83,9,.06)}
-.desc{color:var(--muted);font-size:13.5px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:64ch}
+.name{font-weight:600;font-size:17.5px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.tag.key{color:var(--gold);border:1px solid rgba(242,193,78,.35);background:rgba(242,193,78,.07)}
+.tag.ok{color:var(--cyan);border:1px solid rgba(65,224,216,.35);background:rgba(65,224,216,.07)}
+html[data-theme="light"] .tag.key{color:#B45309;border-color:rgba(180,83,9,.3);background:rgba(180,83,9,.06)}
+html[data-theme="light"] .tag.ok{color:#0D9488;border-color:rgba(13,148,136,.3);background:rgba(13,148,136,.06)}
+.desc{color:var(--muted);font-size:13.5px;margin-top:4px;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;max-width:66ch}
 .v{font-family:var(--font-mono);font-size:11.5px;color:var(--cyan);
   border:1px solid rgba(65,224,216,.28);background:rgba(65,224,216,.06);border-radius:999px;padding:3px 10px;white-space:nowrap}
-html[data-theme="light"] .v{border-color:rgba(13,148,136,.28);background:rgba(13,148,136,.07)}
+html[data-theme="light"] .v{color:#0D9488;border-color:rgba(13,148,136,.28);background:rgba(13,148,136,.07)}
 .chev{color:var(--muted);transition:transform .28s var(--ease-out)}
 .card.open .chev{transform:rotate(90deg);color:var(--cyan)}
 
-.panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s var(--ease-io)}
+.panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s var(--ease-io)}
 .panel>div{overflow:hidden}
-.panel-in{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;padding:2px 24px 26px}
-.panel p{margin:0 0 18px;color:var(--muted);font-size:14px;max-width:62ch}
-.cmd{display:flex;align-items:center;gap:12px;justify-content:space-between;
-  padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);
-  font-family:var(--font-mono);font-size:12.5px;margin-bottom:9px}
+.panel-in{display:grid;grid-template-columns:1.25fr .75fr;gap:30px;padding:2px 22px 24px}
+.panel p{margin:0 0 14px;color:var(--muted);font-size:14px;max-width:60ch}
+.cmd{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:11px 13px;
+  border-radius:11px;border:1px solid var(--line);background:var(--panel-2);
+  font-family:var(--font-mono);font-size:12.5px;margin-bottom:8px}
 .cmd code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .act{flex:none;border:1px solid var(--line-2);background:none;color:var(--muted);border-radius:8px;
   padding:6px 11px;font:inherit;font-family:var(--font-body);font-size:11.5px;cursor:pointer;
@@ -161,71 +153,75 @@ html[data-theme="light"] .v{border-color:rgba(13,148,136,.28);background:rgba(13
 .act:hover{border-color:var(--cyan);color:var(--cyan)}
 .act:active{transform:scale(.96)}
 .act.done{border-color:rgba(65,224,216,.5);color:var(--cyan)}
-dl{margin:0;display:grid;gap:9px}
-.mrow{display:flex;justify-content:space-between;gap:16px;font-size:12.5px;
-  padding-bottom:8px;border-bottom:1px solid var(--line)}
+dl{margin:0;display:grid;gap:8px}
+.mrow{display:flex;justify-content:space-between;gap:14px;font-size:12.5px;padding-bottom:7px;
+  border-bottom:1px solid var(--line)}
 .mrow dt{color:var(--muted)}
-.mrow dd{margin:0;font-family:var(--font-mono);color:var(--text);text-align:right;
-  max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow dd{margin:0;font-family:var(--font-mono);color:var(--text);text-align:right;max-width:190px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+details.code{margin-top:12px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2)}
+details.code summary{cursor:pointer;padding:9px 13px;font-size:12px;color:var(--muted);
+  font-family:var(--font-mono);list-style:none}
+details.code summary::-webkit-details-marker{display:none}
+details.code pre{margin:0;padding:0 13px 13px;overflow:auto;max-height:260px;
+  font-family:var(--font-mono);font-size:11.5px;line-height:1.6;color:var(--muted)}
 
-.empty,.err{padding:40px 24px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);font-size:14px}
+.empty,.err{padding:38px 22px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);font-size:14px}
 .err{color:#FF9BA1}
-.skel{height:84px;border:1px solid var(--line);border-radius:18px;background:var(--panel);
+.skel{height:78px;border:1px solid var(--line);border-radius:18px;background:var(--panel);
   background-image:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);
   background-size:220% 100%;animation:sh 1.5s linear infinite}
 html[data-theme="light"] .skel{background-image:linear-gradient(90deg,transparent,rgba(15,20,35,.05),transparent)}
 @keyframes sh{to{background-position:-220% 0}}
 
-/* loop */
-.loop{padding:72px 0 30px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
-.step{padding:24px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
-.step .n{font-family:var(--font-mono);font-size:11.5px;color:var(--cyan);letter-spacing:.1em}
-.step b{display:block;font-family:var(--font-body);font-weight:600;font-size:15px;margin:10px 0 6px}
-.step p{margin:0;color:var(--muted);font-size:13.5px}
-.step code{font-family:var(--font-mono);font-size:12px;color:var(--text);
-  background:var(--chip);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+/* submit */
+.submit{margin-top:14px;border:1px solid var(--line);border-radius:20px;background:var(--panel);
+  padding:26px 24px;box-shadow:var(--shadow)}
+.submit h2{margin:0 0 6px;font-family:var(--font-display);font-size:12px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted)}
+.submit p{margin:0 0 16px;color:var(--muted);font-size:13.5px;max-width:64ch}
+.drop{border:1px dashed var(--line-2);border-radius:14px;padding:18px;text-align:center;
+  color:var(--muted);font-size:13px;cursor:pointer;transition:.2s var(--ease-out)}
+.drop:hover,.drop.over{border-color:var(--cyan);color:var(--text);background:rgba(65,224,216,.03)}
+textarea{width:100%;min-height:120px;margin-top:12px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel-2);color:var(--text);font-family:var(--font-mono);font-size:12px;
+  padding:12px;outline:none;resize:vertical}
+textarea:focus{border-color:var(--cyan)}
+.submit-row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.note{font-size:12.5px;color:var(--muted)}
+.note.bad{color:#FF9BA1}
+.note.good{color:var(--cyan)}
 
-footer{border-top:1px solid var(--line);margin-top:44px;padding:26px 0 52px;
-  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  color:var(--muted);font-size:12.5px}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 48px;
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12.5px}
 footer a{text-decoration:none;color:var(--muted);transition:color .2s}
 footer a:hover{color:var(--cyan)}
 footer .eth{font-family:var(--font-eth)}
-
 @media (max-width:860px){
   .nav-links{display:none}
-  .hero{padding:64px 0 54px}
-  .glyph{font-size:min(70vw,420px);opacity:.5}
-  .panel-in{grid-template-columns:1fr;gap:24px}
-  .steps{grid-template-columns:1fr}
-  .row{grid-template-columns:1fr auto;gap:12px}
+  .hero{padding:56px 0 40px}
+  .panel-in{grid-template-columns:1fr;gap:22px}
+  .row{grid-template-columns:1fr auto;gap:10px}
   .desc{max-width:100%}
-  .search{min-width:0;width:100%}
 }
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a class="brand" href="./">
-      <span class="brand-mark">ጦ</span>
-      <span class="brand-name">To<em>bia</em></span>
-    </a>
+    <a class="brand" href="./"><span class="brand-mark">ጦ</span><span class="brand-name">To<em>bia</em></span></a>
     <div class="nav-links">
       <a href="#registry">Registry</a>
+      <a href="#publish">Publish</a>
       <a href="https://adwaaudit.com/tobia/">Tobia ↗</a>
-      <a href="#loop">How it works</a>
       <a href="https://github.com/messaynew-cyber/adwa-skills" target="_blank" rel="noopener">GitHub</a>
     </div>
-    <a class="btn primary nav-cta" href="#registry">Install a skill</a>
+    <a class="btn primary" href="#publish">Publish a skill</a>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
     </button>
   </div>
 </nav>
@@ -233,59 +229,64 @@ footer .eth{font-family:var(--font-eth)}
 <header class="hero">
   <div class="glyph" aria-hidden="true">ጦ</div>
   <div class="wrap">
-    <div class="chip"><span class="tri"><i></i><i></i><i></i></span>ጦ Skill registry · packed on the phone that runs it</div>
-    <h1>New capabilities, <span class="grad">no rebuild</span>.</h1>
-    <p class="lede">Tobia builds a tool, <strong>publishes it here</strong>, and installs it on any device
-    in one line. Every manifest is versioned and hashed — and anything carrying a credential is refused
-    before it leaves the device.</p>
+    <div class="chip"><span class="tri"><i></i><i></i><i></i></span>ጦ Shared registry · open publishing</div>
+    <h1>Skills, shared by <span class="grad">everyone</span> who runs her.</h1>
+    <p class="lede">Publish a tool from any Tobia install — <strong>no GitHub account, no token</strong>.
+    Installs are one line. Every manifest is versioned, hashed, and refused if it carries a credential.</p>
     <div class="ctas">
-      <a class="btn primary" href="#registry">Browse the registry
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg>
-      </a>
-      <a class="btn" href="https://github.com/messaynew-cyber/adwa-skills#publishing" target="_blank" rel="noopener">Publish your own</a>
+      <a class="btn primary" href="#registry">Browse skills</a>
+      <a class="btn" href="#publish">Publish yours</a>
     </div>
-    <div class="spec"><span class="t">ጦ</span> GitHub Pages · schema 2 · sha256 verified · በአዲስ አበባ ተሰርቷል</div>
+    <div class="spec"><span class="t">ጦ</span> Cloudflare Worker · schema 2 · sha256 · በአዲስ አበባ ተሰርቷል</div>
   </div>
 </header>
 
 <main class="wrap">
-  <section class="registry" id="registry">
-    <div class="head">
-      <h2 class="h2">Registry <span id="count">loading…</span></h2>
+  <section id="registry">
+    <div class="toolbar">
       <label class="search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity=".6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="Search skills…" autocomplete="off" aria-label="Search skills">
+        <input id="q" type="search" placeholder="Search by name or what it does…" autocomplete="off" aria-label="Search skills">
         <kbd>/</kbd>
       </label>
+      <div class="seg" id="filters">
+        <button data-f="all" class="active">All</button>
+        <button data-f="ready">No keys</button>
+        <button data-f="keys">Needs key</button>
+      </div>
+      <div class="seg" id="sorts">
+        <button data-s="updated" class="active">Newest</button>
+        <button data-s="name">A–Z</button>
+      </div>
+      <span class="count" id="count">loading…</span>
     </div>
-    <div class="list" id="list">
-      <div class="skel"></div>
-      <div class="skel"></div>
+    <div class="list" id="list"><div class="skel"></div><div class="skel"></div></div>
+  </section>
+
+  <section class="submit" id="publish">
+    <h2>Publish a skill</h2>
+    <p>Drop a <code>.skill</code> manifest (or paste the JSON). The Worker validates it, scans for
+    credentials, commits it, and regenerates the index. It goes live in about a minute.</p>
+    <div class="drop" id="drop">Drop a .skill file here, or click to choose</div>
+    <input type="file" id="file" accept=".skill,.json,application/json" hidden>
+    <textarea id="json" placeholder='{ "name": "my_skill", "version": "1.0.0", "description": "…", "code": "…" }' spellcheck="false"></textarea>
+    <div class="submit-row">
+      <button class="btn primary" id="send">Publish</button>
+      <span class="note" id="note">Name: lowercase, 3–41 chars. Version: x.y.z.</span>
     </div>
   </section>
 
-  <section class="loop" id="loop">
-    <h2 class="h2">The loop</h2>
-    <div class="steps">
-      <div class="step"><div class="n">01 · BUILD</div><b>Forge a tool</b>
-        <p><code>create_tool</code> writes it at runtime. If it earns its keep, it gets a version and a changelog.</p></div>
-      <div class="step"><div class="n">02 · PUBLISH</div><b>Ship it</b>
-        <p><code>skill_store action=publish</code> uploads the manifest and regenerates this page. Secrets are refused.</p></div>
-      <div class="step"><div class="n">03 · INSTALL</div><b>Use it anywhere</b>
-        <p><code>action=install name="…"</code> checks the version, verifies the hash, registers it live.</p></div>
-    </div>
-  </section>
+  <footer>
+    <span><span class="eth">ጦ</span> Tobia · <a href="index.json">index.json</a> · <a href="https://adwaaudit.com/tobia/">homepage</a> · <a href="noir.html">alternate design</a></span>
+    <span><a href="https://github.com/messaynew-cyber/adwa-skills" target="_blank" rel="noopener">source</a> · GitHub Pages</span>
+  </footer>
 </main>
-
-<footer class="wrap">
-  <span><span class="eth">ጦ</span> Tobia · <a href="index.json">index.json</a> · <a href="https://adwaaudit.com/tobia/">homepage</a> · <a href="noir.html">alternative design</a></span>
-  <span>Served by GitHub Pages · <a href="https://github.com/messaynew-cyber/adwa-skills" target="_blank" rel="noopener">source</a></span>
-</footer>
 
 <script>
 const $ = s => document.querySelector(s);
+const WORKER = 'https://tobia-skills-publish.messayoracle.workers.dev/publish';
 const listEl = $('#list'), countEl = $('#count'), qEl = $('#q'), nav = $('#nav');
-let skills = [];
+let skills = [], filter = 'all', sort = 'updated';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const short = h => h && h.length > 18 ? h.slice(0,10) + '…' + h.slice(-6) : (h || '—');
@@ -293,10 +294,18 @@ const short = h => h && h.length > 18 ? h.slice(0,10) + '…' + h.slice(-6) : (h
 function card(s, i){
   const keys = s.requires_keys || [];
   const cmd = `skill_store action=install name="${s.name}"`;
-  return `<article class="card" style="--i:${i}">
+  const params = Object.entries(s.parameters || {});
+  const paramRows = params.length
+    ? `<dl style="margin-top:10px">${params.slice(0, 12).map(([k,v]) =>
+        `<div class="mrow"><dt>${esc(k)}</dt><dd>${esc((v && v.type) || '')}</dd></div>`).join('')}</dl>`
+    : '';
+  return `<article class="card" id="skill-${esc(s.name)}" style="--i:${i}">
     <button class="row" aria-expanded="false">
       <div>
-        <div class="name">${esc(s.name)}${keys.length ? '<span class="tag">needs key</span>' : ''}</div>
+        <div class="name">${esc(s.name)}
+          <span class="tag ok">verified</span>
+          ${keys.length ? `<span class="tag key">needs ${esc(keys.join(', '))}</span>` : ''}
+        </div>
         <div class="desc">${esc(s.description || '')}</div>
       </div>
       <span class="v">v${esc(s.version || '0.0.0')}</span>
@@ -307,26 +316,68 @@ function card(s, i){
         <p>${esc(s.description || 'No description.')}</p>
         <div class="cmd"><code>${esc(cmd)}</code><button class="act" data-copy="${esc(cmd)}">Copy</button></div>
         <div class="cmd"><code>${esc(s.name)}.skill</code><a class="act" href="${esc(s.url || '#')}" download>Download</a></div>
+        <div class="extra" data-src="${esc(s.url || '')}"></div>
       </div>
-      <dl>
-        <div class="mrow"><dt>Version</dt><dd>${esc(s.version || '—')}</dd></div>
-        <div class="mrow"><dt>Author</dt><dd>${esc(s.author || 'tobia')}</dd></div>
-        <div class="mrow"><dt>Requires</dt><dd>${keys.length ? esc(keys.join(', ')) : 'nothing'}</dd></div>
-        <div class="mrow"><dt>Updated</dt><dd>${esc(s.updated || '—')}</dd></div>
-        <div class="mrow"><dt>Size</dt><dd>${s.size ? (Math.round(s.size/102.4)/10) + ' KB' : '—'}</dd></div>
-        <div class="mrow"><dt>sha256</dt><dd title="${esc(s.sha256 || '')}">${esc(short(s.sha256))}</dd></div>
-      </dl>
+      <div>
+        <dl>
+          <div class="mrow"><dt>Version</dt><dd>${esc(s.version || '—')}</dd></div>
+          <div class="mrow"><dt>Author</dt><dd>${esc(s.author || 'community')}</dd></div>
+          <div class="mrow"><dt>Updated</dt><dd>${esc(s.updated || '—')}</dd></div>
+          <div class="mrow"><dt>Size</dt><dd>${s.size ? (Math.round(s.size/102.4)/10) + ' KB' : '—'}</dd></div>
+          <div class="mrow"><dt>sha256</dt><dd title="${esc(s.sha256 || '')}">${esc(short(s.sha256))}</dd></div>
+        </dl>
+      </div>
     </div></div></div>
   </article>`;
 }
 
 function render(){
   const q = qEl.value.trim().toLowerCase();
-  const shown = skills.filter(s => !q || ((s.name||'') + ' ' + (s.description||'')).toLowerCase().includes(q));
+  let shown = skills.filter(s => !q || ((s.name||'') + ' ' + (s.description||'')).toLowerCase().includes(q));
+  if (filter === 'ready') shown = shown.filter(s => !(s.requires_keys || []).length);
+  if (filter === 'keys') shown = shown.filter(s => (s.requires_keys || []).length);
+  shown.sort((a,b) => sort === 'name'
+    ? (a.name || '').localeCompare(b.name || '')
+    : String(b.updated || '').localeCompare(String(a.updated || '')));
   countEl.textContent = `${shown.length} / ${skills.length}`;
-  if (!skills.length){ listEl.innerHTML = '<div class="empty">Empty registry. Publish the first skill from Tobia.</div>'; return; }
+  if (!skills.length){ listEl.innerHTML = '<div class="empty">Empty registry. Be the first to publish.</div>'; return; }
   if (!shown.length){ listEl.innerHTML = `<div class="empty">Nothing matches “${esc(q)}”.</div>`; return; }
   listEl.innerHTML = shown.map(card).join('');
+  openFromHash();
+}
+
+async function hydrate(art){
+  const box = art.querySelector('.extra');
+  if (!box || box.dataset.loaded === '1') return;
+  const src = box.dataset.src;
+  if (!src) return;
+  box.dataset.loaded = '1';
+  box.innerHTML = '<div class="note" style="padding:10px 0">loading manifest…</div>';
+  try{
+    const r = await fetch(src + '?t=' + Date.now());
+    const m = await r.json();
+    const params = Object.entries(m.parameters || {});
+    const rows = params.length
+      ? `<dl style="margin-top:10px">${params.map(([k,v]) =>
+          `<div class="mrow"><dt>${esc(k)}</dt><dd>${esc((v && (v.type || '')) + ((v && v.required) ? ' · required' : ''))}</dd></div>`).join('')}</dl>`
+      : '';
+    const code = String(m.code || '').split('\n').slice(0, 24).join('\n');
+    box.innerHTML = rows +
+      `<details class="code"><summary>code · ${String(m.code || '').split('\n').length} lines</summary><pre>${esc(code)}</pre></details>`;
+  }catch(e){
+    box.innerHTML = '<div class="note bad">manifest fetch failed</div>';
+  }
+}
+
+function openFromHash(){
+  const m = location.hash.match(/#skill-(.+)$/);
+  if (!m) return;
+  const el = document.getElementById('skill-' + m[1]);
+  if (!el) return;
+  el.classList.add('open');
+  el.querySelector('.row')?.setAttribute('aria-expanded','true');
+  el.querySelector('.panel').style.gridTemplateRows = '1fr';
+  el.scrollIntoView({block:'center', behavior:'smooth'});
 }
 
 listEl.addEventListener('click', e => {
@@ -344,25 +395,78 @@ listEl.addEventListener('click', e => {
   const open = art.classList.toggle('open');
   row.setAttribute('aria-expanded', open ? 'true' : 'false');
   art.querySelector('.panel').style.gridTemplateRows = open ? '1fr' : '0fr';
+  if (open) hydrate(art);
 });
 
 qEl.addEventListener('input', render);
 document.addEventListener('keydown', e => {
-  if (e.key === '/' && document.activeElement !== qEl){ e.preventDefault(); qEl.focus(); }
+  if (e.key === '/' && document.activeElement !== qEl && document.activeElement.tagName !== 'TEXTAREA'){
+    e.preventDefault(); qEl.focus();
+  }
+});
+$('#filters').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  $('#filters').querySelectorAll('button').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); filter = b.dataset.f; render();
+});
+$('#sorts').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  $('#sorts').querySelectorAll('button').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); sort = b.dataset.s; render();
 });
 addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), {passive:true});
 
-// theme
 const root = document.documentElement;
 const saved = localStorage.getItem('tobia-store-theme');
-const prefersLight = matchMedia('(prefers-color-scheme: light)').matches;
-root.dataset.theme = saved || (prefersLight ? 'light' : 'dark');
+root.dataset.theme = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 $('#themeToggle').addEventListener('click', () => {
   const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
   root.dataset.theme = next; localStorage.setItem('tobia-store-theme', next);
 });
 
-(async () => {
+// ── publish ──
+const note = $('#note'), jsonEl = $('#json'), drop = $('#drop'), fileEl = $('#file');
+function say(msg, kind){ note.textContent = msg; note.className = 'note' + (kind ? ' ' + kind : ''); }
+function loadFile(f){
+  const r = new FileReader();
+  r.onload = () => { jsonEl.value = String(r.result); say(`Loaded ${f.name} (${f.size} B)`); };
+  r.readAsText(f);
+}
+drop.addEventListener('click', () => fileEl.click());
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+drop.addEventListener('drop', e => {
+  e.preventDefault(); drop.classList.remove('over');
+  const f = e.dataTransfer.files?.[0]; if (f) loadFile(f);
+});
+fileEl.addEventListener('change', () => { const f = fileEl.files?.[0]; if (f) loadFile(f); });
+
+$('#send').addEventListener('click', async () => {
+  let m;
+  try { m = JSON.parse(jsonEl.value); }
+  catch { return say('Not valid JSON.', 'bad'); }
+  if (!/^[a-z][a-z0-9_]{2,40}$/.test(m.name || '')) return say('Bad name: lowercase, 3–41 chars, a–z 0–9 _', 'bad');
+  if (!/^\d+\.\d+\.\d+$/.test(m.version || '')) return say('Bad version: use x.y.z', 'bad');
+  if (!m.code || typeof m.code !== 'string') return say('Missing code.', 'bad');
+  if (!m.description) return say('Missing description.', 'bad');
+  say('Publishing…');
+  try {
+    const r = await fetch(WORKER, {method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({...m, author: m.author || 'community'})});
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d.ok){
+      say(`Published ${d.name} v${d.version} — live in ~1 min.`, 'good');
+      jsonEl.value = '';
+      setTimeout(load, 4000);
+    } else {
+      say(d.error || ('Rejected (' + r.status + ')'), 'bad');
+    }
+  } catch (err){
+    say('Network error: ' + err.message, 'bad');
+  }
+});
+
+async function load(){
   try{
     const r = await fetch('index.json?t=' + Date.now(), {cache:'no-store'});
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -373,7 +477,8 @@ $('#themeToggle').addEventListener('click', () => {
     listEl.innerHTML = `<div class="err">Registry unreachable — ${esc(err.message)}. <a href="" style="color:var(--cyan)">Retry</a></div>`;
     countEl.textContent = 'offline';
   }
-})();
+}
+load();
 </script>
 </body>
 </html>
