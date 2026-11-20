@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T17:30:17.034Z",
+ "updated": "2026-11-20T18:56:40.320Z",
  "skills": [
   {
    "name": "mageflow_generate",
@@ -13,6 +13,16 @@
    "sha256": "4db2484c96c4be24114612ac413f32ed2b804b76a9eb742c507202969eea52ba",
    "size": 11517,
    "updated": "2026-11-18"
+  },
+  {
+   "name": "tobia_store_probe",
+   "version": "9.9.9",
+   "description": "Connectivity probe - no real tool. Safe to delete.",
+   "author": "tobia-probe",
+   "url": "https://messaynew-cyber.github.io/adwa-skills/tobia_store_probe.skill",
+   "requires_keys": [],
+   "size": 298,
+   "updated": "2026-11-20"
   }
  ]
 }
