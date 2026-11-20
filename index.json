@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-18T21:10:24Z",
+ "updated": "2026-11-20T20:21:47.142147",
  "skills": [
   {
    "name": "mageflow_generate",
@@ -13,6 +13,17 @@
    "sha256": "4db2484c96c4be24114612ac413f32ed2b804b76a9eb742c507202969eea52ba",
    "size": 11517,
    "updated": "2026-11-18"
+  },
+  {
+   "name": "tobia_store_probe",
+   "version": "1.0.0",
+   "description": "Probe tool used once to verify the Skill Store publish pipeline end-to-end. Returns a fixed sentinel string.",
+   "author": "tobia",
+   "url": "https://messaynew-cyber.github.io/adwa-skills/tobia_store_probe.skill",
+   "requires_keys": [],
+   "sha256": "{\"ok\": true, \"output\": \"2ea29788c69c5225a4e582195d663556f287d57043a5c1513b6b9a2e3e57805e\\n\", \"lane\": {\"lane\": \"worker\", \"python\": \"3.14.10\", \"implementation\": \"cpython\", \"label\": \"rootfs worker daemon (PRIMARY)\", \"primary\": true, \"fallback\": false}}",
+   "size": 776,
+   "updated": "2026-11-20"
   }
  ]
 }
